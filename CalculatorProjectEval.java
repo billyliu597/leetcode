@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.lang.*;
 
 /**
  *
@@ -89,7 +90,7 @@ public class CalculatorProjectEval
             
     }
     
-     public static void startCalc(){
+     public static void startCalc() {
         // your code here to get user input, and calculate/print results. You'll call
         // the calculate(String s) as part of your code here, which returns a String
         // with the result to print. 
@@ -99,33 +100,31 @@ public class CalculatorProjectEval
             System.out.println("E: quit");
             return;
         }else{
-            try{
-                String result = calculate(input);
-                System.out.println("E: "+ result);
-            }
-            catch (InvalidInputException e){
-                 System.out.println("E: ERROR");
-            }
+
+            String result = calculate(input);
+            System.out.println("E: "+ result);
         }
     }
     
     public static String calculate(String s){
+        try{
         // you add code here to take a String as a parameter, and return a String with the result
 		String[] tokens = Tokenize(s);
 		 if (tokens == null || tokens.length <= 1){
             // Invalid input when there is just one token
-            throw new InvalidInputException("");
+            throw new Exception("");
         }else{
             switch (tokens[0]){
                 case "|":
-                    return ProcessAbsCommand(token);
-                    break;
+                    return ProcessAbsCommand(tokens);
                 case "v":
-                    return ProcessSqrtCommand(token);
-                    break;
+                    return ProcessSqrtCommand(tokens);
             }
             
             return "";
+        }
+        } catch (Exception e){
+            return "ERROR";
         }
     }
      
@@ -135,37 +134,35 @@ public class CalculatorProjectEval
      }
      
      private static String[] Tokenize(String input){
-       return input.Split(" ");
+       return input.split(" ");
     }
     
     
-    private static String ProcessSqrtCommand(String[] tokens){
-        if (tokens.Length != 2){
-            throw new InvalidInputException("");
+    private static String ProcessSqrtCommand(String[] tokens) throws Exception{
+        if (tokens.length != 2){
+            throw new Exception("");
         }
         
         int num = ParseInt(tokens[1]);
         
-        return Math.sqrt(num).toString();
+        return String.valueOf(Math.sqrt(num));
     }
     
-    private static String ProcessAbsCommand(String[] tokens){
-        if (tokens.Length != 2){
-            throw new InvalidInputException("");
+    private static String ProcessAbsCommand(String[] tokens) throws Exception{
+        if (tokens.length != 2){
+            throw new Exception("");
         }
         
         int num = ParseInt(tokens[1]);
         
-        return Math.abs(num).toString();
+        return String.valueOf(Math.abs(num));
     }
     
-    private static int ParseInt(String token){
+    private static int ParseInt(String token) throws Exception{
         try{
-            return int.Parse(token);
+            return Integer.parseInt(token);
         }catch (Exception e){
-            throw new InvalidInputException(token);
+            throw new Exception(token);
         }
     }
-    
-    
 }
